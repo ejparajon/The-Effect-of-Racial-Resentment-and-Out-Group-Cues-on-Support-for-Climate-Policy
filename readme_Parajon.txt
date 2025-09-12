@@ -36,6 +36,7 @@ List of files:
 
 "CCES_2016_2018.rds": This data file is used in the correlational analysis appendix (see CES_analysis.R). 
 
-"pfunc_dat_clean.rds": This data file is used in the experimental analysis (see pfunc_analysis.R). 
+"experiment_dat_clean.rds": This data file is used in the experimental analysis (see pfunc_analysis.R). 
+
 
 "The_Effect_of_Racial_Resentment_and_Out_Group_Cues_on_Support_for_Climate_Policy.pdf": Pdf version of the published paper.
