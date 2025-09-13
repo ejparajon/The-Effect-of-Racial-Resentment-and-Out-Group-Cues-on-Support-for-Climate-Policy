@@ -132,44 +132,14 @@ H2_bin_mod <- avg_slopes(H2_bin_mod,variable="frame")
 
 #13.3 (95% CI [-20.3,-6.31]) percentage points smaller in the benefit condition and 8.9 (95% CI [-16.0, -1.77]) percentage points lower in the harm condition. 
 
-#w/ controls for robustness
-H2_mod_controls<-lm(dv ~ frame+age+gender+Income+PartyID+political_ideo_3+Poli_interest_num+Religiosity_num+educ, data = Main_data_analysis)
 
 #Table A17: Effect of Frame Treatment on Climate Policy Approval
-stargazer(H2_mod,H2_mod_controls,title="Effect of Frame Treatment on Climate Policy Approval",digits=3,star.cutoffs = c(0.1,0.05,0.01),
+stargazer(H2_mod,title="Effect of Frame Treatment on Climate Policy Approval",digits=3,star.cutoffs = c(0.1,0.05,0.01),
           label="H2_table",
-          covariate.labels = c("\\textbf{Frame} (reference= Control) &   \\\\
+          covariate.labels = c("\\textbf{Treatment} (reference= Control) &   \\\\
                       \\hspace{1cm}Benefit",
-                      "\\hspace{1cm}Harm",
-                      "\\textbf{Age} (reference= 18-24) &   \\\\
-                      \\hspace{1cm}25 - 34",
-                      "\\hspace{1cm}35 - 44",
-                      "\\hspace{1cm}45 - 54",
-                      "\\hspace{1cm}55 or older",
-                      "\\textbf{Gender} (reference= Female) &   \\\\
-                      \\hspace{1cm}Male",
-                      "\\hspace{1cm}Other",
-                      "\\textbf{Income} (reference= Up to \\$29,999) &   \\\\
-                      \\hspace{1cm}\\$30,0000--\\$59,999",
-                      "\\hspace{1cm}\\$60,000--\\$99,999",
-                      "\\hspace{1cm}\\$100,000--\\$149,999",
-                      "\\hspace{1cm}More than \\$150,000",
-                      "\\hspace{1cm}Prefer not to say",
-                      "\\textbf{Political Party} (reference= Independent) &   \\\\
-                      \\hspace{1cm}Democrat",
-                      "\\hspace{1cm}Republican",
-                      "\\hspace{1cm}Don't know/Other",
-                      "\\textbf{Political Ideology} (reference= Moderate) &   \\\\
-                      \\hspace{1cm}Liberal",
-                      "\\hspace{1cm}Conservative",
-                      "\\textbf{Political interest}",
-                      "\\textbf{Religiosity}",
-                      "\\textbf{Education} (reference= Associate's Degree) &   \\\\
-                       \\hspace{1cm}Less than high school",
-                      "\\hspace{1cm}High school graduate",
-                      "\\hspace{1cm}Some college",
-                      "\\hspace{1cm}Bachelor's Degree",
-                      "\\hspace{1cm}Advanced Degree"),
+                      "\\hspace{1cm}Harm"),
+          
           notes="\\parbox[t]{12cm}{Coefficients reported from OLS regression model. The dependent variable is coded on a five point scale, with four indicating support a great deal. Significance codes:{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01}, two-tailed tests.}",
           notes.append=FALSE,
           style="apsr",
@@ -180,7 +150,6 @@ stargazer(H2_mod,H2_mod_controls,title="Effect of Frame Treatment on Climate Pol
           notes.align= "l",
           column.sep.width = "1pt",
           font.size = "tiny",
-          column.labels = c("Baseline", "Controls included"),
           no.space = TRUE)
 
 
