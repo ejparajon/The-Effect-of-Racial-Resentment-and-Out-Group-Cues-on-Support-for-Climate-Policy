@@ -1,4 +1,6 @@
 # Preamble ----------------------------------------------------------------
+# Per ISQ: Start logging analysis
+sink("analysis_output_pfunc.txt")
 
 #Clear workspace and setting seed for any randomization
 rm(list=ls())
@@ -959,4 +961,6 @@ ovb_minimal_reporting(sense_1)
 
 #The negative effect of the frame is robust, an omitted variable would need to be many times stronger than partisanship to fully explain it away.
 
+# Stop logging
+sink()
 

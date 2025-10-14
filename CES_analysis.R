@@ -1,7 +1,9 @@
 #The Effect of Racial Resentment and Out-Group Cues on Support for Climate Policy
-#9/12/2025
+#10/14/2025
 
 # Preamble ----------------------------------------------------------------
+# Per ISQ: Start logging analysis
+sink("analysis_output_CES.txt")
 
 #Clear workspace
 rm(list=ls())
@@ -21,6 +23,7 @@ Main_data_analysis <- import("data/CES_dat_clean.rds")
 source("custom_functions.R")
 
 # B. Analysis ----------------------------------------------------------------
+
 
 #B1. Description of DVs and key IV
 #Summarizing DVs
@@ -1075,4 +1078,8 @@ stargazer(regulate_CO2_18,renewable_fuels_18,EPA_18,raise_fuel_18,title="2018:Ef
           notes.align= "c",
           column.sep.width = "1pt",
           no.space = TRUE)
+
+
+# Stop logging
+sink()
 
