@@ -15,7 +15,7 @@ pacman::p_load(broom,stargazer,rio,tidyverse,interplot,patchwork,xtable,modelsum
 
 
 #Loading in the data file, this assumes the datafile is saved in the same working directory as the R code file.
-Main_data_analysis<- readRDS("data\\experiment_dat_clean.rds")
+Main_data_analysis<- readRDS("data/experiment_dat_clean.rds")
 
 # Calling custom functions and ggplot theme
 source("custom_functions.R")
@@ -124,6 +124,7 @@ H2_final_plot<-H2_final_plot + plot_annotation(tag_levels = list(c("(a)","(b)"))
 H2_final_plot
 
 #ggsave("H2_final_plot.png",H2_final_plot,width=12,height=6,units="in",dpi=300,bg = 'white')
+ggsave("Figure4.eps",H2_final_plot,width=6.5,height=5.25,units="in",dpi=300,bg = 'white')
 
 
 #binary dv for percentage point decline in support
@@ -189,6 +190,7 @@ H2_plot_mech <- ggplot(data=H2_base_mech, aes(x=contrast)) +
 H2_plot_mech
 
 #ggsave("Pfunc\\H2_plot_mech.png",H2_plot_mech,width=7.5, height=4,units="in",dpi=300,bg = 'white')
+ggsave("Figure5.eps",H2_plot_mech,width=6.5,height=3,units="in",dpi=300,bg = 'white')
 
 
 #Table for Appendix
@@ -300,6 +302,7 @@ H3_plot_final<-plot_grid(H3_plot, Dist_RR_harm, ncol = 1, nrow = 2, align = "v",
 
 #Title: Marginal Effect of Treatment on Climate Policy Approval By Level of Racial Resentment w/ 95\% CI
 #ggsave("Pfunc\\H3_plot_alt.png",H3_plot_final,width=10, height=8.75,units="in",dpi=300,bg = 'white')
+ggsave("Figure6.eps",H3_plot_final,width=6.5,height=8.5,units="in",dpi=300,bg = 'white')
 
 #Tables for appendix
 
@@ -397,24 +400,6 @@ RR_sub_effect <- avg_predictions(
     "benefit" = "Benefit"))
 
 
-RR_sub_plot <- ggplot(RR_sub_effect, aes(x = Racial_resentment, y = estimate)) +
-  geom_point(size = 2) +
-  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.00, linewidth = 0.5) +
-  geom_label(aes(y=estimate,label=round(estimate, digits=2)), size=3)+
-  facet_wrap(~frame) +
-  labs(
-    caption = 'Predicted support for climate policy by level of racial resentment.\nValues of all other variables held at mode/mean.\nEstimates shown with 83.4% CI.',
-    x = "Level of Racial Resentment",
-    y = "Predicted Support for Climate Policy"
-  ) +
-  plot_theme +
-  scale_y_continuous(limits = c(0, 4), breaks = seq(0, 4, 0.5)) +
-  scale_x_continuous(breaks = seq(0, 1, 0.125))
-
-
-#ggsave("RR_sub_plot.png",RR_sub_plot,width=11,height=6,units="in",dpi=300,bg = 'white')
-
-
 #Min max values of RR
 plotData_RR_minmax<-RR_sub_effect%>% 
   filter(Racial_resentment%in%c(0,1)) %>% 
@@ -465,6 +450,7 @@ Party_plot_leaners <- ggplot(ME_party_leaners_frame, aes(x = PartyID, y = estima
 Party_plot_leaners
 
 #ggsave("Pfunc\\Party_plot_leaners.png",Party_plot_leaners,width=10, height=6,units="in",dpi=300,bg = 'white')
+ggsave("Figure7.eps",Party_plot_leaners,width=6.5,height=3.9,units="in",dpi=300,bg = 'white')
 
 
 #Substantive effects
