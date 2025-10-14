@@ -11,7 +11,7 @@ set.seed(101)
 if (!require("pacman")) install.packages("pacman")
 
 #Installing and loading packages for use
-pacman::p_load(broom,stargazer,rio,tidyverse,interplot,patchwork,xtable,modelsummary,naniar,estimatr,jtools,sandwich,regrrr,marginaleffects,psych,cowplot,janitor,lavaan,sensemakr)
+pacman::p_load(broom,stargazer,rio,tidyverse,interplot,patchwork,xtable,modelsummary,naniar,estimatr,jtools,sandwich,regrrr,marginaleffects,psych,cowplot,janitor,lavaan,sensemakr,cobalt)
 
 
 #Loading in the data file, this assumes the datafile is saved in the same working directory as the R code file.
@@ -326,7 +326,8 @@ stargazer(frame_model_RR,title="Heterogeneous Effects of Treatment on Climate Po
           column.sep.width = "1pt",
           font.size = "small",
           add.lines=list(c('Control Variables', 'Yes')),
-          no.space = TRUE)
+          no.space = TRUE,
+         out = "Table2.html")
 
 #Table A21: Heterogeneous Effects of Frame Treatment on Climate Policy Approval: Racial Resentment
 
@@ -433,6 +434,8 @@ ME_party_leaners <- avg_slopes(main_model_party_leaners,variables="frame",by=c("
 #Renaming contrast for ease of comparison
 ME_party_leaners$contrast[ME_party_leaners$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 ME_party_leaners$contrast[ME_party_leaners$contrast == "mean(harm) - mean(control)"] <- "Harm"
+ME_party_leaners$contrast[ME_party_leaners$contrast == "benefit - control"] <- "Benefit"
+ME_party_leaners$contrast[ME_party_leaners$contrast == "harm - control"] <- "Harm"
 
 
 #"These negative effects of the cues are statistically significant at the p <0.01 level."
@@ -465,12 +468,20 @@ Party_plot_leaners
 
 
 #Substantive effects
-party_sub_effect <- avg_predictions(main_model_party_leaners,variables=c("frame","pid_leaners_inc"),conf_level = 0.834)%>% 
+party_sub_effect <- avg_predictions(
+  main_model_party_leaners,
+  variables = list(
+    frame = c("control", "harm", "benefit"),
+    pid_leaners_inc = c("Republican", "Democrat")
+  ),
+  newdata = model.frame(main_model_party_leaners),
+  conf_level = 0.834
+)%>% 
   mutate(frame= dplyr::recode(frame,"control" = "Control",
                               "harm" = "Harm",
                               "benefit" = "Benefit")) %>% 
   mutate(PartyID= dplyr::recode(pid_leaners_inc,"Republican" = "Republicans",
-                                "Democrat" = "Democrats")) 
+                                "Democrat" = "Democrats"))
 
 #"Furthermore, support for climate policy among Democrats remained substantively higher than among Republicans, with Democrats in both cue conditions (2.79 in the benefit condition and 2.82 in harm) expressing a higher level of support than Republicans in the control group (2.33)."
 
@@ -537,6 +548,8 @@ ME_party <- avg_slopes(main_model_party,variables="frame",by=c("PartyID"))
 #Renaming contrast for ease of comparison
 ME_party$contrast[ME_party$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 ME_party$contrast[ME_party$contrast == "mean(harm) - mean(control)"] <- "Harm"
+ME_party$contrast[ME_party$contrast == "benefit - control"] <- "Benefit"
+ME_party$contrast[ME_party$contrast == "harm - control"] <- "Harm"
 
 ME_party_frame<-ME_party %>% 
   filter(contrast%in%c("Benefit","Harm")) %>% 
@@ -545,23 +558,6 @@ ME_party_frame<-ME_party %>%
                                 "Democrat" = "Democrats")) %>% 
   mutate(lower90=estimate-1.645*std.error) %>% 
   mutate(upper90=estimate+1.645*std.error) 
-
-#Plotting
-Party_plot <- ggplot(ME_party_frame, aes(x = PartyID, y = estimate, color = PartyID))+
-  labs(x="PartyID",y='Effect of Cue on Support for Climate Policy',
-       caption='Support ranges from 0 (oppose a great deal) to 4 (support a great deal).\nReference Category: Control condition.  \nOuter errors bars: 95% CI; inner error bars: 90% CI.\n Model controls for demographics.\n N=1,059.')+
-  scale_color_manual(values=c("#EBCC2A","#3B9AB2","#F21A00"))+
-  facet_grid(~contrast)+
-  geom_errorbar(aes(ymin=lower90, ymax=upper90, width=0), linewidth=1 , position = position_dodge(width=.2)) +
-  geom_errorbar(aes(ymin=conf.low, ymax=conf.high, width=0), linewidth=.5 , position = position_dodge(width=.2)) +
-  geom_point(aes(y=estimate), size=1.75, position = position_dodge(width=.2)) +
-  geom_hline(yintercept = 0) +
-  geom_label(aes(y=estimate,label=round(estimate, digits=2)), size=3,show.legend = FALSE)+
-  ylim(-1, 0.1) +
-  plot_theme+
-  coord_flip()+
-  guides(color="none")
-Party_plot
 
 
 # Appendix ----------------------------------------------------------------
@@ -583,7 +579,6 @@ demographics<-Main_data_analysis %>%
 treat_balance<-datasummary_balance(~ frame,data = dplyr::select(demographics,frame,age,gender,Income,PartyID,Poli_interest ,Religiosity,educ,RR_three_cat),output="latex",title="Demographic Balance Table: Pfunc")
 
 #Balance testing
-library(cobalt)
 #Conservative threshold of 0.1 based on 
 #Stuart, Elizabeth A., Brian K. Lee, and Finbarr P. Leacy. 2013. “Prognostic Score-Based Balance Measures Can Be a Useful Diagnostic for Propensity Score Methods in Comparative Effectiveness Research.” Journal of Clinical Epidemiology 66 (8): S84. https://doi.org/10.1016/j.jclinepi.2013.01.013.
 
@@ -623,7 +618,7 @@ ttest_harm_check<-t.test(Main_data_analysis$comp_check_harm_bin[Main_data_analys
 
 ##### Confirmatory factor analysis: RR and Nationalism #####
 
-#Confirmatory Factor Analysis of Racial Resentment Index Items
+#Table A19: Confirmatory Factor Analysis of Racial Resentment Index Ite
 RR_item<-Main_data_analysis %>%
   dplyr::select(RR_no_favors,RR_slavery,RR_tryharder,RR_deserve)
 
@@ -642,7 +637,7 @@ parameterEstimates(fit.cat_RR, standardized=TRUE) %>%
 
 
 
-#Confirmatory Factor Analysis of Nationalism Index Items
+#Table A20: Confirmatory Factor Analysis of Nationalism Index Items
 nat_item<-Main_data_analysis %>%
   dplyr::select(EP.nationalism_1,EP.nationalism_2,EP.nationalism_3)
 
@@ -695,7 +690,7 @@ H2_scope<-H2_scope %>%
   mutate(lower90=estimate-1.645*std.error) %>% 
   mutate(upper90=estimate+1.645*std.error) 
 
-#plotting
+#Figure A2: Effect of Cues on Support for Climate Action by Type
 H2_scope_plot <- ggplot(data=H2_scope, aes(x=contrast,color=Scope,shape=Scope)) + 
   geom_hline(yintercept=0, color="red", linewidth=.5) +
   geom_errorbar(aes(ymin=lower90, ymax=upper90, width=0), linewidth=1 , position = position_dodge(width=.2)) +
@@ -759,7 +754,7 @@ H2_mech_scope_df<-H2_mech_scope_df %>%
   mutate(lower90=estimate-1.645*std.error) %>% 
   mutate(upper90=estimate+1.645*std.error) 
 
-#plotting
+#Figure A3: Effect of Cues on Perceived Personal Benefit of Climate Action by Type
 H2_scope_plot_mech <- ggplot(data=H2_mech_scope_df, aes(x=contrast,color=Scope,shape=Scope)) + 
   geom_hline(yintercept=0, color="red", linewidth=.5) +
   geom_errorbar(aes(ymin=lower90, ymax=upper90, width=0), linewidth=1 , position = position_dodge(width=.2)) +
@@ -805,10 +800,8 @@ stargazer(H2_mod_mech_scope,title="Overall Effect of Frame*Scope Treatments on H
 
 ##### H5: Nationalism as a moderator ##### 
 
-
 #Correlation between two
 # "The Pearson correlation coefficient between racial resentment and nationalism is 0.346 suggesting a weak relationship"
-library(psych)
 correlation_df<-dplyr::select(Main_data_analysis,Racial_resentment,Nationalism)
 
 correlation<-corr.test(correlation_df)
@@ -894,6 +887,7 @@ stargazer(main_model_nat,title="Heterogeneous Effects of Treatment on Climate Po
 
 ## Pre-registered scope difference ----
 
+#Table A25: Effects of Scope Treatment on Climate Policy Approval
 
 #Base Model that I'll get contrasts off of 
 scope_model<-lm(dv~scope, data = Main_data_analysis %>% filter(frame=="control"))
@@ -910,7 +904,7 @@ summ(scope_model_RR)
 #scope b: Nationalistic respondents prefer domestic
 scope_model_nat<-lm(dv~scope*Nationalism+age+gender+Income+PartyID+political_ideo_3+Poli_interest_num+Religiosity_num+educ, data = Main_data_analysis %>% filter(frame=="control"))
 
-#combined Tables for appendix A22
+#combined Tables for 
 
 stargazer(scope_model,scope_model_RR,scope_model_nat,title="Heterogeneous Effects of Scope Treatment on Climate Policy Approval",digits=3,star.cutoffs = c(0.1,0.05,0.01),
           order = c(27,28,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26),

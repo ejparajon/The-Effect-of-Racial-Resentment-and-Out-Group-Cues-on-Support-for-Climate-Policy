@@ -24,7 +24,7 @@ source("custom_functions.R")
 
 #B1. Description of DVs and key IV
 #Summarizing DVs
-mean(Main_data_analysis$climate_COP,na.rm=T)*100 #  61.09 % approval
+mean(Main_data_analysis$climate_COP,na.rm=T)*100 #  61.09 % approval ~p. 14
 mean(Main_data_analysis$climate_CPP,na.rm=T)*100 # 63.81 % approval
 
 #Correlation between DVs
@@ -115,7 +115,7 @@ theme(plot.margin = unit(c(0,0,-3.5,0), "lines"))+
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.line.x=element_blank())+
-  theme(legend.position = c(.87, .87))
+  theme(legend.position = c(.83, .83))
 
 #Adding histogram
 #Graph: Distribution of RR
@@ -133,9 +133,10 @@ Dist_RR<- ggplot(RR, aes(x = Racial_resentment,y=Percentage,label=round(Percenta
 #Combining into 1 with overlaid histogram to show dist of RR
 Fig1_final<-plot_grid(Fig1, Dist_RR, ncol = 1, nrow = 2, align = "v", axis = "lr",rel_heights=c(2.5,1))
 
+
 #Title= Overall Effect of Racial Resentment on Climate Policy Approval
 #ggsave("Figure1.png",Fig1_final,width=11,height=7,units="in",dpi=300,bg = 'white')
-
+ggsave("Figure1.eps",Fig1_final,width=6.5,height=5.14,units="in",dpi=300,bg = 'white')
 
 #Min max values overall for in text discussion p.15.
 Fig1_dataMM<-Fig1_data %>% 
@@ -184,9 +185,7 @@ stargazer(main_model_cop_logit,main_model_cpp_logit,title="Overall Effect of Rac
           font.size = "scriptsize",
           no.space = TRUE)
 
-#2.3 H3. The relationship between racial resentment and climate action will hold for individuals who identify with both the Republican and Democratic party.
-##### Fig2: PID ##### 
-
+##### Table 3: Results by PID ##### 
 
 #Number of min and max RR by party
 RR_party<-pctgroup(Main_data_analysis,PID_leaners,Racial_resentment) %>% 
@@ -263,7 +262,7 @@ stargazer(m1_dems,m2_dems,m3_indeps,m4_indeps,m5_repubs,m6_repubs,title="Overall
           notes.align= "c",
           column.sep.width = "1pt",
           add.lines=list(c('Control Variables', 'Yes','Yes',"Yes","Yes","Yes","Yes")),
-          no.space = TRUE)
+          no.space = TRUE,out = "Table3.html")
 
 
 #Displaying w/ controls
@@ -535,13 +534,13 @@ Party_plot<-Party_plot + plot_annotation(tag_levels = list(c("(a)","(b)","(c)"))
 Party_plot
 
 #Title=Effect of Racial Resentment on Climate Policy Approval  w/ 95\% CI By Party Affiliation
-#ggsave("Party_plot_pres_CES.png",Party_plot,width=12,height=7,units="in",dpi=300,bg = 'white')
+#ggsave("Party_plot.png",Party_plot,width=12,height=7,units="in",dpi=300,bg = 'white')
 
 #Min max values by party
 Party_min_max<-rbind(Fig_dem,Fig_indeps,Fig_repubs)%>% 
   filter(Racial_resentment%in%c(0,1))
 
-#Percentage point reductions in support (in-text)
+#Percentage point reductions in support (in-text) ~p.21
 diff_values<-Party_min_max %>% 
         group_by(Policy,Party) %>% 
   mutate(diff = (Fit - Fit[1])*100, 
@@ -573,7 +572,7 @@ demographics_age <-  dplyr::select(Main_data_analysis,Age) %>%
 #Mean_age= 50.4
 
 
-#Confirmatory factor analysis: RR
+#Table A4: Confirmatory Factor Analysis of Racial Resentment Index Items (CES)
 RR_item<-Main_data_analysis %>%
   dplyr::select(RR_trad_no_favors,RR_trad_slavery)
 
@@ -597,20 +596,20 @@ parameterEstimates(fit.cat_RR, standardized=TRUE) %>%
 #Each FIRE question individually
 
 #COP21 DV whites_advantage
-main_model_cop_FIRE_1<-glm(climate_COP~RR_full_whites_advantage+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
+cop_FIRE_1<-glm(climate_COP~RR_full_whites_advantage+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
 
 #CPP DV whites_advantage
-main_model_cpp_FIRE_1<-glm(climate_CPP~RR_full_whites_advantage+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
+cpp_FIRE_1<-glm(climate_CPP~RR_full_whites_advantage+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
 
 #COP21 DV racialprobs_rare
-main_model_cop_FIRE_2<-glm(climate_COP~RR_full_racialprobs_rare+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
+cop_FIRE_2<-glm(climate_COP~RR_full_racialprobs_rare+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
 
 
-main_model_cpp_FIRE_2<-glm(climate_CPP~RR_full_racialprobs_rare+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
+cpp_FIRE_2<-glm(climate_CPP~RR_full_racialprobs_rare+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
 
 #Table A8: Effect of FIRE Questions on Climate Policy Approval
 
-stargazer(main_model_cop_FIRE_1,main_model_cpp_FIRE_1,main_model_cop_FIRE_2,main_model_cpp_FIRE_2,title="Effect of FIRE Questions Individually on Climate Policy Approval: With Controls Shown",digits=3,keep.stat=c("n","rsq"),
+stargazer(cop_FIRE_1,cpp_FIRE_1,cop_FIRE_2,cpp_FIRE_2,title="Effect of FIRE Questions Individually on Climate Policy Approval: With Controls Shown",digits=3,keep.stat=c("n","rsq"),
           omit = c("Constant"),
           label="FIRE_indv",
           covariate.labels = c("\\textbf{White people in the U.S. have advantages}",
@@ -763,32 +762,28 @@ fun.bls.form_CPP <- function(x) {
 
 # Employment quotient
 #COP21
-model_county_nr_employ <-glm(fun.bls.form("employ_quotient"),
+nr_employ <-glm(fun.bls.form("employ_quotient"),
                              family=binomial(link="logit"), data = Main_data_bls)
 
-summary(model_county_nr_employ)
 
 #CPP
-model_county_nr_employ_CPP <-glm(fun.bls.form_CPP("employ_quotient"),
+nr_employ_CPP <-glm(fun.bls.form_CPP("employ_quotient"),
                                  family=binomial(link="logit"), data = Main_data_bls)
 
-summary(model_county_nr_employ_CPP)
 
 # Wage quotient
 #CPP
-model_county_nr_wage <-glm(fun.bls.form("wage_quotient"),
+nr_wage <-glm(fun.bls.form("wage_quotient"),
                            family=binomial(link="logit"), data = Main_data_bls)
-summary(model_county_nr_wage)
 
 #CPP
-model_county_nr_wage_CPP <-glm(fun.bls.form_CPP("wage_quotient"),
+nr_wage_CPP <-glm(fun.bls.form_CPP("wage_quotient"),
                                family=binomial(link="logit"), data = Main_data_bls)
-summary(model_county_nr_wage_CPP)
 
 #Controlling for both employment or  wage quotient in natural resources the negative effect of RR remains persistently negative and statistically and substantively meaningful. 
 
 #Putting it all in a table
-stargazer(model_county_nr_employ,model_county_nr_employ_CPP,model_county_nr_wage,model_county_nr_wage_CPP,title="Effect of Racial Resentment: Location-Based Analysis",digits=3,keep.stat=c("n","rsq"),
+stargazer(nr_employ,nr_employ_CPP,nr_wage,nr_wage_CPP,title="Effect of Racial Resentment: Location-Based Analysis",digits=3,keep.stat=c("n","rsq"),
           omit = c("Constant"),
           #keep = c("Racial_resentment","employ_quotient","wage_quotient"), 
           label="location_Table",
@@ -883,15 +878,15 @@ stargazer(COP_non_rural,CPP_non_rural,COP_rural,CPP_rural,title="Overall Effect 
   ## Nationalism proxy ----
   
 # including support for building a wall
-main_model_cop_logit_wall<-glm(climate_COP~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners+Mexico_wall, family=binomial(link="logit"), data = Main_data_analysis)
+cop_logit_wall<-glm(climate_COP~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners+Mexico_wall, family=binomial(link="logit"), data = Main_data_analysis)
 
 #CPP DV logit
-main_model_cpp_logit_wall<-glm(climate_CPP~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners+Mexico_wall, family=binomial(link="logit"), data = Main_data_analysis)
+cpp_logit_wall<-glm(climate_CPP~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners+Mexico_wall, family=binomial(link="logit"), data = Main_data_analysis)
 
 
 
 #Adding in control variables for the main models
-stargazer(main_model_cop_logit_wall,main_model_cpp_logit_wall,title="Effect of Racial Resentment on Climate Policy Approval: Wall Control",digits=3,keep.stat=c("n","rsq"),
+stargazer(cop_logit_wall,cpp_logit_wall,title="Effect of Racial Resentment on Climate Policy Approval: Wall Control",digits=3,keep.stat=c("n","rsq"),
           omit = c("Constant"),
           label="Wall_results_controls",
           covariate.labels = c("\\textbf{Racial Resentment}",
@@ -986,13 +981,13 @@ regulate_CO2_16<-glm(regulate_CO2~Racial_resentment+educ+gender+region+Income+Ag
 renewable_fuels_16<-glm(renewable_fuels~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2016))
 
 #strengthen_EPA
-strengthen_EPA_16<-glm(strengthen_EPA~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2016))
+EPA_16<-glm(strengthen_EPA~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2016))
 
 #raise_fuelefficiency
-raise_fuelefficiency_16<-glm(raise_fuelefficiency~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2016))
+raise_fuel_16<-glm(raise_fuelefficiency~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2016))
 
 
-stargazer(regulate_CO2_16,renewable_fuels_16,strengthen_EPA_16,raise_fuelefficiency_16,title="2016:Effect of Racial Resentment on Climate Proposal Approval: With Controls Shown",digits=3,keep.stat=c("n","rsq"),
+stargazer(regulate_CO2_16,renewable_fuels_16,EPA_16,raise_fuel_16,title="2016:Effect of Racial Resentment on Climate Proposal Approval: With Controls Shown",digits=3,keep.stat=c("n","rsq"),
           omit = c("Constant"),
           label = "CES:2016",
           covariate.labels = c("\\textbf{Racial Resentment}",
@@ -1037,14 +1032,14 @@ regulate_CO2_18<-glm(regulate_CO2~Racial_resentment+educ+gender+region+Income+Ag
 renewable_fuels_18<-glm(renewable_fuels~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2018))
 
 #strengthen_EPA
-strengthen_EPA_18<-glm(strengthen_EPA~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2018))
+EPA_18<-glm(strengthen_EPA~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2018))
 
 #raise_fuelefficiency
-raise_fuelefficiency_18<-glm(raise_fuelefficiency~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2018))
+raise_fuel_18<-glm(raise_fuelefficiency~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = CCES_2016_2018_analysis %>% filter(year==2018))
 
 
 
-stargazer(regulate_CO2_18,renewable_fuels_18,strengthen_EPA_18,raise_fuelefficiency_18,title="2018:Effect of Racial Resentment on Climate Proposal Approval: With Controls Shown",digits=3,keep.stat=c("n","rsq"),
+stargazer(regulate_CO2_18,renewable_fuels_18,EPA_18,raise_fuel_18,title="2018:Effect of Racial Resentment on Climate Proposal Approval: With Controls Shown",digits=3,keep.stat=c("n","rsq"),
           omit = c("Constant"),
           label = "CES:2018",
           covariate.labels = c("\\textbf{Racial Resentment}",
