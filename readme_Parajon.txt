@@ -30,13 +30,14 @@ List of files:
 
 "custom_functions.r": This is an R code file used to pull in a variety of functions used throughout the other code files.
 
-"CES_dat_clean.rds": This data file is used in the correlational analysis (see CES_analysis.R). 
+"CES_dat_clean.rds": This data file is used in the correlational analysis (see CES_analysis.R). The citation for the data is Ansolabehere, Stephen, Brian F. Schaffner, and Sam Luks. 2021. “Cooperative Election Study 2020,” http://cces.gov.harvard.edu/.
 
-"allhlcn20.xlsx": This data file is used the correlational analysis appendix (see CES_analysis.R). 
+"allhlcn20.xlsx": This data file is used the correlational analysis appendix (see CES_analysis.R). The citation is U.S. Bureau of Labor Statistics. (2020). County-HL Industry data. U.S. Department of Labor. https://www.bls.gov/data/
 
 "CCES_2016_2018.rds": This data file is used in the correlational analysis appendix (see CES_analysis.R). 
 
-"experiment_dat_clean.rds": This data file is used in the experimental analysis (see pfunc_analysis.R). 
+"experiment_dat_clean.rds": This data file is used in the experimental analysis (see pfunc_analysis.R). This is author collected data. 
 
 
 "The_Effect_of_Racial_Resentment_and_Out_Group_Cues_on_Support_for_Climate_Policy.pdf": Pdf version of the published paper.
+
