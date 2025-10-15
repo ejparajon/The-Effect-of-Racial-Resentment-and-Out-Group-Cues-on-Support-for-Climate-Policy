@@ -24,9 +24,9 @@ List of packages and version used:
 
 List of files: 
 
-"CES_analysis.r": This is an R code file used for analysis of the correlational results (Figures X, Tables Y).
+"CES_analysis.r": This is an R code file used for analysis of the correlational results (Figures 1 and A1; Tables 3, A2, A4, A5, A6, A8, A10, A11, A12, A13, A14, and A24).
 
-"pfunc_analysis.r": This is an R code file used for analysis of the experimental results (Figures X, Tables Y).
+"pfunc_analysis.r": This is an R code file used for analysis of the experimental results (Figures 4, 5, 6, 7, A2, A3; Tables 2, A16, A17, A18, A19, A20, A21, A22, A23, and A25).
 
 "custom_functions.r": This is an R code file used to pull in a variety of functions used throughout the other code files.
 
@@ -40,4 +40,5 @@ List of files:
 
 
 "The_Effect_of_Racial_Resentment_and_Out_Group_Cues_on_Support_for_Climate_Policy.pdf": Pdf version of the published paper.
+
 
