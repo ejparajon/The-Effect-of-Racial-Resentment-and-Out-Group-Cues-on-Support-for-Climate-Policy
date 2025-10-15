@@ -49,7 +49,7 @@ print(xtable(RR,"Distribution of Racial Resentment Across Respondents"), include
 ##### Fig1 ##### 
 
 #B2. Hypothesis testing
-#H1: The effect of racial resentment at reducing support for climate action will hold when the climate action in question is U.S. involvement in an international agreement as well as domestic climate action.
+#H1: Individuals exhibiting higher levels of racial resentment will indicate lower probability of support for both international and domestic climate action.
 
 #COP21 DV logit
 main_model_cop_logit<-glm(climate_COP~Racial_resentment+educ+gender+region+Income+Age+political_ideo_3+PID_leaners, family=binomial(link="logit"), data = Main_data_analysis)
