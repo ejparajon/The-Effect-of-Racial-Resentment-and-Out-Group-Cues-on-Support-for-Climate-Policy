@@ -248,6 +248,8 @@ ME_RR_frame <- avg_slopes(frame_model_RR,variables="frame",by=c("Racial_resentme
 #Renaming variables
 ME_RR_frame$contrast[ME_RR_frame$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 ME_RR_frame$contrast[ME_RR_frame$contrast == "mean(harm) - mean(control)"] <- "Harm"
+ME_RR_frame$contrast[ME_RR_frame$contrast == "benefit - control"] <- "Benefit"
+ME_RR_frame$contrast[ME_RR_frame$contrast == "harm - control"] <- "Harm"
 
 #Adding in 83.4% CI for comparison
 ME_RR_frame<-ME_RR_frame %>% 
@@ -303,7 +305,7 @@ Dist_RR_harm<- ggplot(RR_harm, aes(x = Racial_resentment,y=n)) +
 H3_plot_final<-plot_grid(H3_plot, Dist_RR_harm, ncol = 1, nrow = 2, align = "v", axis = "lr",rel_heights=c(2.5,1))
 
 #Title: Marginal Effect of Treatment on Climate Policy Approval By Level of Racial Resentment w/ 95\% CI
-#ggsave("Pfunc\\H3_plot_alt.png",H3_plot_final,width=10, height=8.75,units="in",dpi=300,bg = 'white')
+#ggsave("Figure6.png",H3_plot_final,width=10, height=8.75,units="in",dpi=300,bg = 'white')
 ggsave("Figure6.eps",H3_plot_final,width=6.5,height=8.5,units="in",dpi=300,bg = 'white')
 
 #Tables for appendix
@@ -551,7 +553,8 @@ ME_party_frame<-ME_party %>%
 # Appendix ----------------------------------------------------------------
 ##### Demographics #####
 
-#Creating demographic balance table on the treatment variable among white respondents
+#Table A16: Demographic Balance Table
+
 
 demographics<-Main_data_analysis %>% 
   dplyr::select(frame,Ideology=political_ideo_3,RR_three_cat,age,gender,Income,PartyID,Poli_interest =interest ,religiosity,educ) %>% 
@@ -563,7 +566,6 @@ demographics<-Main_data_analysis %>%
   mutate(Ideology = factor(Ideology, levels=c("Liberal","Moderate", "Conservative"))) 
 
 
-#Treatment Balance Table
 treat_balance<-datasummary_balance(~ frame,data = dplyr::select(demographics,frame,age,gender,Income,PartyID,Poli_interest ,Religiosity,educ,RR_three_cat),output="latex",title="Demographic Balance Table: Pfunc")
 
 #Balance testing
@@ -666,6 +668,9 @@ H2_scope <- avg_slopes(H2_mod_scope,variable="frame",by="scope")
 H2_scope$contrast[H2_scope$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 H2_scope$contrast[H2_scope$contrast == "mean(harm) - mean(control)"] <- "Harm"
 H2_scope$contrast[H2_scope$contrast == "mean(International) - mean(Domestic)"] <- "International - Domestic"
+H2_scope$contrast[H2_scope$contrast == "benefit - control"] <- "Benefit"
+H2_scope$contrast[H2_scope$contrast == "harm - control"] <- "Harm"
+H2_scope$contrast[H2_scope$contrast == "International - Domestic"] <- "International - Domestic"
 
 
 #The negative effect of the cues is statistically
@@ -732,8 +737,11 @@ H2_mod_mech_scope<-lm(dv_help_hurt ~ frame*scope, data = Main_data_analysis)
 nobs(H2_mod_mech_scope)
 
 H2_mech_scope_df <- avg_slopes(H2_mod_mech_scope,variable="frame",by="scope")
+#Renaming
 H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "mean(harm) - mean(control)"] <- "Harm"
+H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "benefit) - control"] <- "Benefit"
+H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "harm) - control"] <- "Harm"
 
 #Selecting contrasts of interest to plot
 H2_mech_scope_df<-H2_mech_scope_df %>% 
