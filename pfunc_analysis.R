@@ -174,14 +174,14 @@ H2_base_mech<-H2_base_mech %>%
   filter(contrast%in%c("Benefit","Harm")) %>% 
   mutate(lower90=estimate-1.645*std.error) %>% 
   mutate(upper90=estimate+1.645*std.error) 
-  
+
 
 #Figure 5: Effect of Cues on Perceived Personal Benefit of Climate Action
 H2_plot_mech <- ggplot(data=H2_base_mech, aes(x=contrast)) + 
   geom_hline(yintercept=0, color="red", linewidth=.5) +
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high, width=0), linewidth=.5, position = position_dodge(width=.2)) +
   geom_errorbar(aes(ymin=lower90, ymax=upper90, width=0), linewidth=1, position = position_dodge(width=.2)) + 
-    geom_point(aes(y=estimate), size=2.75, position = position_dodge(width=.2)) +
+  geom_point(aes(y=estimate), size=2.75, position = position_dodge(width=.2)) +
   xlab("Treatment\ncondition") +
   labs(y='Effect of Cue on Belief the Climate Policy will Help/Harm People Like You',
        caption='Support ranges from 0 (harm a great deal) to 4 (help a great deal).\nReference Category: Control condition. \n Outer errors bars: 95% CI; inner error bars: 90% CI.\n N=1,154.')+
@@ -245,7 +245,7 @@ nobs(frame_model_RR)
 #Pulling out marginal effects by level of RR
 ME_RR_frame <- avg_slopes(frame_model_RR,variables="frame",by=c("Racial_resentment"))
 
-#Renaming variables
+#Renaming variables (marginal effects changes the output of avg_slopes depending on version so I include code that should work regardless of version installed)
 ME_RR_frame$contrast[ME_RR_frame$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 ME_RR_frame$contrast[ME_RR_frame$contrast == "mean(harm) - mean(control)"] <- "Harm"
 ME_RR_frame$contrast[ME_RR_frame$contrast == "benefit - control"] <- "Benefit"
@@ -259,7 +259,7 @@ ME_RR_frame<-ME_RR_frame %>%
 
 #Just harm condition for plot
 ME_RR_frame_plot<-ME_RR_frame %>% 
-            filter(contrast=="Harm")
+  filter(contrast=="Harm")
 
 #"respondents with the highest level of racial resentment reporting a decline in support of -0.60 (p <0.00), relative to respondents with the highest level of racial resentment in the control"
 
@@ -322,18 +322,18 @@ stargazer(frame_model_RR,title="Heterogeneous Effects of Treatment on Climate Po
          "\\hspace{1cm}Benefit",
          "\\hspace{1cm}Harm",
          "\\textbf{Racial Resentment}"),
-          notes="\\parbox[t]{12cm}{Coefficients reported from OLS regression model. Model includes control variables for age, gender, income, partyID, political interest, religiosity, political ideology, and education level. The dependent variable is coded on a five point scale, with four indicating support a great deal. Significance codes:{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01}, two-tailed tests.}",
-          notes.append=FALSE,
-          style="apsr",
-          dep.var.caption = c(""),
-          dep.var.labels.include = FALSE,
-          table.layout ="-c-!t-sa-n",
-          header=FALSE,
-          notes.align= "l",
-          column.sep.width = "1pt",
-          font.size = "small",
-          add.lines=list(c('Control Variables', 'Yes')),
-          no.space = TRUE,
+         notes="\\parbox[t]{12cm}{Coefficients reported from OLS regression model. Model includes control variables for age, gender, income, partyID, political interest, religiosity, political ideology, and education level. The dependent variable is coded on a five point scale, with four indicating support a great deal. Significance codes:{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01}, two-tailed tests.}",
+         notes.append=FALSE,
+         style="apsr",
+         dep.var.caption = c(""),
+         dep.var.labels.include = FALSE,
+         table.layout ="-c-!t-sa-n",
+         header=FALSE,
+         notes.align= "l",
+         column.sep.width = "1pt",
+         font.size = "small",
+         add.lines=list(c('Control Variables', 'Yes')),
+         no.space = TRUE,
          out = "Table2.html")
 
 #Table A21: Heterogeneous Effects of Frame Treatment on Climate Policy Approval: Racial Resentment
@@ -483,36 +483,36 @@ stargazer(main_model_party_leaners,title="Heterogeneous Effects of Frame Treatme
           covariate.labels = c("\\textbf{Frame*PartyID} (reference= Control * Democrat) &   \\\\
                       \\hspace{1cm}Benefit * Republican",
                       "\\hspace{1cm}Harm * Republican",
-            "\\textbf{Frame} (reference= Control) &   \\\\
+                      "\\textbf{Frame} (reference= Control) &   \\\\
                       \\hspace{1cm}Benefit",
                       "\\hspace{1cm}Harm",
-            "\\textbf{Political Party (leaners inc.)} (reference= Democrat) &   \\\\
+                      "\\textbf{Political Party (leaners inc.)} (reference= Democrat) &   \\\\
             \\hspace{1cm}Republican",
-                      "\\textbf{Age} (reference= 18-24) &   \\\\
+            "\\textbf{Age} (reference= 18-24) &   \\\\
                       \\hspace{1cm}25 - 34",
-                      "\\hspace{1cm}35 - 44",
-                      "\\hspace{1cm}45 - 54",
-                      "\\hspace{1cm}55 or older",
-                      "\\textbf{Gender} (reference= Female) &   \\\\
+            "\\hspace{1cm}35 - 44",
+            "\\hspace{1cm}45 - 54",
+            "\\hspace{1cm}55 or older",
+            "\\textbf{Gender} (reference= Female) &   \\\\
                       \\hspace{1cm}Male",
-                      "\\hspace{1cm}Other",
-                      "\\textbf{Income} (reference= Up to \\$29,999) &   \\\\
+            "\\hspace{1cm}Other",
+            "\\textbf{Income} (reference= Up to \\$29,999) &   \\\\
                       \\hspace{1cm}\\$30,0000--\\$59,999",
-                      "\\hspace{1cm}\\$60,000--\\$99,999",
-                      "\\hspace{1cm}\\$100,000--\\$149,999",
-                      "\\hspace{1cm}More than \\$150,000",
-                      "\\hspace{1cm}Prefer not to say",
-                      "\\textbf{Political Ideology} (reference= Moderate) &   \\\\
+            "\\hspace{1cm}\\$60,000--\\$99,999",
+            "\\hspace{1cm}\\$100,000--\\$149,999",
+            "\\hspace{1cm}More than \\$150,000",
+            "\\hspace{1cm}Prefer not to say",
+            "\\textbf{Political Ideology} (reference= Moderate) &   \\\\
                       \\hspace{1cm}Liberal",
-                      "\\hspace{1cm}Conservative",
-                      "\\textbf{Political interest}",
-                      "\\textbf{Religiosity}",
-                      "\\textbf{Education} (reference= Associate's Degree) &   \\\\
+            "\\hspace{1cm}Conservative",
+            "\\textbf{Political interest}",
+            "\\textbf{Religiosity}",
+            "\\textbf{Education} (reference= Associate's Degree) &   \\\\
                        \\hspace{1cm}Less than high school",
-                      "\\hspace{1cm}High school graduate",
-                      "\\hspace{1cm}Some college",
-                      "\\hspace{1cm}Bachelor's Degree",
-                      "\\hspace{1cm}Advanced Degree"),
+            "\\hspace{1cm}High school graduate",
+            "\\hspace{1cm}Some college",
+            "\\hspace{1cm}Bachelor's Degree",
+            "\\hspace{1cm}Advanced Degree"),
           notes="\\parbox[t]{12cm}{Coefficients reported from OLS regression model. The dependent variable is coded on a five point scale, with four indicating support a great deal. Significance codes:{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01}, two-tailed tests.}",
           notes.append=FALSE,
           style="apsr",
@@ -578,7 +578,7 @@ bal.tab(frame ~ Racial_resentment+age+female+Income+PartyID+political_ideo_3+Pol
 
 #Footnote 26: "Respondents who received the benefit treatment answered that “non-Whites” are the group that most benefit at significantly (p < 0.000) higher rates (23 percentage points higher) than those in the control. Additionally, those who received the harm treatment answered that that “non-Whites” are the group most negatively impacted by climate change at significantly (p < 0.000), 22 percentage points higher, higher rates than those in the control."
 
-  #Benefit
+#Benefit
 Benefit_Comp_check <- Main_data_analysis %>% dplyr::select(comp_check_benefit_bin, frame) %>% 
   dplyr:: filter(!is.na(comp_check_benefit_bin)) %>%
   group_by(frame) %>% 
@@ -588,10 +588,10 @@ Benefit_Comp_check <- Main_data_analysis %>% dplyr::select(comp_check_benefit_bi
 
 print(xtable(Benefit_Comp_check,"Answers to Factual Comprehension Check: Benefit"), include.rownames=T)
 
-    #T.test: benefit
+#T.test: benefit
 ttest_benefit_check<-t.test(Main_data_analysis$comp_check_benefit_bin[Main_data_analysis$frame=="control"],Main_data_analysis$comp_check_benefit_bin[Main_data_analysis$frame=="benefit"])
 
-  #Harm 
+#Harm 
 Harm_Comp_check <- Main_data_analysis %>% dplyr::select(comp_check_harm_bin, frame) %>% 
   dplyr:: filter(!is.na(comp_check_harm_bin)) %>%
   group_by(frame) %>% 
@@ -740,8 +740,8 @@ H2_mech_scope_df <- avg_slopes(H2_mod_mech_scope,variable="frame",by="scope")
 #Renaming
 H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "mean(benefit) - mean(control)"] <- "Benefit"
 H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "mean(harm) - mean(control)"] <- "Harm"
-H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "benefit) - control"] <- "Benefit"
-H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "harm) - control"] <- "Harm"
+H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "benefit - control"] <- "Benefit"
+H2_mech_scope_df$contrast[H2_mech_scope_df$contrast == "harm - control"] <- "Harm"
 
 #Selecting contrasts of interest to plot
 H2_mech_scope_df<-H2_mech_scope_df %>% 
