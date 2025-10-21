@@ -558,11 +558,9 @@ ME_party_frame<-ME_party %>%
 
 demographics<-Main_data_analysis %>% 
   dplyr::select(frame,Ideology=political_ideo_3,RR_three_cat,age,gender,Income,PartyID,Poli_interest =interest ,religiosity,educ) %>% 
-  #filter(gender%in%c("Female","Male")) %>% 
   mutate(Poli_interest = factor(Poli_interest, levels=c("Most of the time","Some of the time","Only now and then","Hardly at all"))) %>% 
   mutate(Religiosity = factor(religiosity, levels=c("More than once a week","Once a week","A few times a month","A few times a year","Never"))) %>% 
-  #filter(Religiosity!="") %>% 
-  #filter(gender!="") %>% 
+  filter(gender!="") %>% 
   mutate(Ideology = factor(Ideology, levels=c("Liberal","Moderate", "Conservative"))) 
 
 
@@ -794,7 +792,7 @@ stargazer(H2_mod_mech_scope,title="Overall Effect of Frame*Scope Treatments on H
           no.space = TRUE)
 
 
-##### H5: Nationalism as a moderator ##### 
+##### Nationalism as a moderator ##### 
 
 #Correlation between two
 # "The Pearson correlation coefficient between racial resentment and nationalism is 0.346 suggesting a weak relationship"
@@ -881,7 +879,7 @@ stargazer(main_model_nat,title="Heterogeneous Effects of Treatment on Climate Po
 
 
 
-## Pre-registered scope difference ----
+## Scope difference for appendix----
 
 #Table A25: Effects of Scope Treatment on Climate Policy Approval
 
@@ -967,7 +965,7 @@ plot(sense_1, sensitivity.of = "t-value")
 
 ovb_minimal_reporting(sense_1)
 
-#The negative effect of the frame is robust, an omitted variable would need to be many times stronger than partisanship to fully explain it away.
+#The negative effect of the frame is robust, an omitted variable would need to be stronger than partisanship to fully explain it away.
 
 # Stop logging
 sink()
