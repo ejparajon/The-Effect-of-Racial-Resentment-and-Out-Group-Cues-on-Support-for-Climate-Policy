@@ -136,10 +136,33 @@ Dist_RR<- ggplot(RR, aes(x = Racial_resentment,y=Percentage,label=round(Percenta
 #Combining into 1 with overlaid histogram to show dist of RR
 Fig1_final<-plot_grid(Fig1, Dist_RR, ncol = 1, nrow = 2, align = "v", axis = "lr",rel_heights=c(2.5,1))
 
+Fig1_final <- plot_grid(
+  Fig1, Dist_RR,
+  ncol = 1,
+  align = "v",
+  axis = "l",       
+  rel_heights = c(2.44, 1)
+)
+
+
+Fig1_final
 
 #Title= Overall Effect of Racial Resentment on Climate Policy Approval
 #ggsave("Figure1.png",Fig1_final,width=11,height=7,units="in",dpi=300,bg = 'white')
-ggsave("Figure1.eps",Fig1_final,width=6.5,height=5.14,units="in",dpi=300,bg = 'white')
+
+ggsave(
+  "Figure1.eps",
+  plot = Fig1_final,
+  width = 6.5,
+  height = 5.14,
+  units = "in",
+  dpi = 300,
+  bg = "white",
+  device = cairo_ps
+)
+
+
+ggsave("Figure1.eps",Fig1_final,width=6.5,height=5.14,units="in",dpi=300,bg = 'white',device=cairo_ps)
 
 #Min max values overall for in text discussion p.15.
 Fig1_dataMM<-Fig1_data %>% 
