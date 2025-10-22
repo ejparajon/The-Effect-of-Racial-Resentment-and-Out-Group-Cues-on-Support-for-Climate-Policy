@@ -162,8 +162,6 @@ ggsave(
 )
 
 
-ggsave("Figure1.eps",Fig1_final,width=6.5,height=5.14,units="in",dpi=300,bg = 'white',device=cairo_ps)
-
 #Min max values overall for in text discussion p.15.
 Fig1_dataMM<-Fig1_data %>% 
   filter(Racial_resentment%in%c(0,1)) %>% 
