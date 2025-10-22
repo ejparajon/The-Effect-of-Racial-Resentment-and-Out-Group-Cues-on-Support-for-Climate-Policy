@@ -134,8 +134,6 @@ Dist_RR<- ggplot(RR, aes(x = Racial_resentment,y=Percentage,label=round(Percenta
 
 
 #Combining into 1 with overlaid histogram to show dist of RR
-Fig1_final<-plot_grid(Fig1, Dist_RR, ncol = 1, nrow = 2, align = "v", axis = "lr",rel_heights=c(2.5,1))
-
 Fig1_final <- plot_grid(
   Fig1, Dist_RR,
   ncol = 1,
