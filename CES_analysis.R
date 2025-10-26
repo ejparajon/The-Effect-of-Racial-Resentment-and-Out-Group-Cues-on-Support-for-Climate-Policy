@@ -139,7 +139,7 @@ Fig1_final <- plot_grid(
   ncol = 1,
   align = "v",
   axis = "l",       
-  rel_heights = c(2.44, 1)
+  rel_heights = c(2.44, 1.25)
 )
 
 
